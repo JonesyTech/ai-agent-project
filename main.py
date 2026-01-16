@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 import argparse
+from prompts import system_prompt
+from functions.call_function import available_functions
 
 load_dotenv()
 
@@ -24,6 +26,8 @@ def main():
     response = client.models.generate_content(
         model="gemini-2.5-flash",
         contents=messages,
+        tools=available_functions,
+        config=types.GenerateContentConfig(system_instruction=system_prompt),
     )
 
     if response.usage_metadata is None:
